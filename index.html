@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Приложение для генерации музыки - демо дизайна</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0c0b10;--s1:#16141d;--s2:#211e2b;--ink:#f2f0f7;--mut:#a39fb3;--acc:#c6ff3d;--acc2:#7b5cff;--m:clamp(16px,2.4vw,36px);--ease:cubic-bezier(.2,.8,.2,1)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.5 Manrope,system-ui,sans-serif;overflow-x:hidden}
+.wrap{max-width:1300px;margin:0 auto;padding:0 var(--m)}
+header{padding:40px 0 10px}
+h1{font:700 clamp(30px,4.6vw,60px)/1.02 Unbounded;letter-spacing:-.04em;max-width:18ch}
+.lead{color:var(--mut);max-width:60ch;margin-top:14px;font-size:18px}
+.screens{display:flex;gap:28px;overflow-x:auto;padding:40px 0 50px;scroll-snap-type:x mandatory}
+.ph{flex:0 0 300px;scroll-snap-align:start}
+.ph>small{display:block;color:var(--mut);margin-bottom:10px;font-size:14px}
+.dev{width:300px;height:640px;background:#000;border-radius:42px;padding:10px;box-shadow:0 30px 60px -30px rgba(123,92,255,.35)}
+.scr{width:100%;height:100%;background:var(--s1);border-radius:34px;overflow:hidden;position:relative;display:flex;flex-direction:column;padding:44px 18px 18px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.top b{font:700 15px Unbounded}
+.cred{background:var(--s2);padding:5px 10px;border-radius:99px;font-size:12px;color:var(--acc)}
+.ttl{font:700 22px/1.1 Unbounded;letter-spacing:-.03em;margin-bottom:14px}
+textarea{width:100%;height:96px;background:var(--s2);border:1.5px solid transparent;border-radius:18px;color:var(--ink);padding:12px;font:500 14px Manrope;resize:none}
+textarea:focus{outline:none;border-color:var(--acc2)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.chip{background:var(--s2);border:0;color:var(--ink);padding:7px 11px;border-radius:99px;font:500 12px Manrope;cursor:pointer;transition:background .2s,color .2s}
+.chip.on{background:var(--acc);color:#111}
+.lbl{font-size:12px;color:var(--mut);margin-top:6px}
+.slider{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mut)}
+.slider input{flex:1;accent-color:var(--acc)}
+.go{margin-top:auto;background:var(--acc);color:#111;border:0;border-radius:18px;padding:16px;font:700 15px Unbounded;cursor:pointer;transition:transform .2s}
+.go:active{transform:scale(.97)}
+/* generating */
+.orb{width:210px;height:210px;margin:20px auto;border-radius:50%;background:conic-gradient(from 0deg,var(--acc2),var(--acc),#ff5ea8,var(--acc2));filter:blur(18px);animation:spin 6s linear infinite;opacity:.9}
+@keyframes spin{to{transform:rotate(360deg)}}
+.wave{display:flex;align-items:center;gap:3px;height:70px;justify-content:center;margin:10px 0}
+.wave i{width:4px;border-radius:2px;background:var(--acc);animation:bar 1s ease-in-out infinite;animation-delay:calc(var(--k)*-60ms)}
+@keyframes bar{0%,100%{height:12%}50%{height:var(--h)}}
+.stagep{text-align:center;color:var(--mut);font-size:13px}
+.prog{height:6px;background:var(--s2);border-radius:3px;margin-top:14px;overflow:hidden}.prog i{display:block;height:100%;width:62%;background:var(--acc);border-radius:3px;animation:pr 4s ease-in-out infinite}
+@keyframes pr{from{width:10%}to{width:96%}}
+/* player */
+.cover{aspect-ratio:1;border-radius:26px;background:radial-gradient(circle at 30% 30%,#ff5ea8,transparent 55%),radial-gradient(circle at 70% 70%,var(--acc2),transparent 60%),#1d1830;position:relative;overflow:hidden}
+.cover span{position:absolute;left:16px;bottom:14px;font:700 20px/1.05 Unbounded}
+.trk{margin-top:14px}.trk b{display:block;font-size:16px}.trk small{color:var(--mut)}
+.scrub{display:flex;align-items:center;gap:2px;height:44px;margin:12px 0}
+.scrub i{flex:1;border-radius:2px;background:var(--s2)}.scrub i.pl{background:var(--acc)}
+.ctr{display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.ctr button{background:var(--s2);border:0;width:48px;height:48px;border-radius:50%;color:var(--ink);font-size:16px;cursor:pointer}
+.ctr .pp{width:72px;height:72px;background:var(--acc);color:#111;font-size:22px}
+/* library */
+.lib{display:grid;gap:10px}
+.it{display:flex;gap:12px;align-items:center;background:var(--s2);border-radius:16px;padding:10px}
+.it i{width:46px;height:46px;border-radius:12px;flex:none}
+.it b{display:block;font-size:14px}.it small{color:var(--mut);font-size:12px}
+.tab{display:flex;justify-content:space-around;margin-top:auto;padding-top:12px;font-size:11px;color:var(--mut)}.tab span.on{color:var(--acc)}
+.notes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding-bottom:60px}
+.notes div{background:var(--s1);border-radius:20px;padding:22px}
+.notes b{display:block;font:700 17px Unbounded;margin-bottom:6px}.notes p{color:var(--mut)}
+@media(max-width:900px){.notes{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><h1>Музыка из одной фразы</h1><p class="lead">Демо дизайна Android-приложения для генерации музыки: 4 ключевых экрана. Экран «Создать» живой - впишите идею и выберите жанр, нажмите «Создать трек».</p></header>
+<div class="screens">
+ <div class="ph"><small>1. Создать</small><div class="dev"><div class="scr">
+  <div class="top"><b>Создать</b><span class="cred">★ 12 треков</span></div>
+  <div class="ttl">Опишите, какой трек нужен</div>
+  <textarea id="pr">Тёплый лоу-фай для вечерней прогулки под дождём</textarea>
+  <div class="lbl">Жанр</div><div class="chips" id="gen"></div>
+  <div class="lbl">Настроение</div><div class="chips" id="mood"></div>
+  <div class="slider">30 с<input type="range" min="30" max="240" value="120" aria-label="Длительность">4 мин</div>
+  <button class="go" id="go" type="button">Создать трек</button>
+ </div></div></div>
+ <div class="ph"><small>2. Генерация</small><div class="dev"><div class="scr">
+  <div class="top"><b>Создаём</b><span class="cred">~ 20 сек</span></div>
+  <div class="orb"></div>
+  <div class="wave" id="wave"></div>
+  <div class="stagep" id="stg">Подбираем гармонию…</div>
+  <div class="prog"><i></i></div>
+ </div></div></div>
+ <div class="ph"><small>3. Плеер</small><div class="dev"><div class="scr">
+  <div class="top"><b>Готово</b><span class="cred">Скачать MP3</span></div>
+  <div class="cover"><span id="cvt">Вечер под дождём</span></div>
+  <div class="trk"><b id="tn">Вечер под дождём</b><small id="tg">Лоу-фай · спокойное · 2:00</small></div>
+  <div class="scrub" id="scrub"></div>
+  <div class="ctr"><button type="button" aria-label="Заново">↻</button><button class="pp" id="pp" type="button" aria-label="Пауза">❚❚</button><button type="button" aria-label="Поделиться">↗</button></div>
+ </div></div></div>
+ <div class="ph"><small>4. Библиотека</small><div class="dev"><div class="scr">
+  <div class="top"><b>Мои треки</b><span class="cred">12</span></div>
+  <div class="lib" id="lib"></div>
+  <div class="tab"><span>Создать</span><span class="on">Библиотека</span><span>Тарифы</span><span>Профиль</span></div>
+ </div></div></div>
+</div>
+<div class="notes">
+ <div><b>Под ваш прототип</b><p>Сохраню логику и порядок экранов из прототипа, поменяю визуальный стиль и состояния.</p></div>
+ <div><b>Material 3</b><p>Сетка, отступы и компоненты по гайдам Android - разработчику будет удобно верстать.</p></div>
+ <div><b>Figma</b><p>Экраны, состояния (загрузка, ошибка, пусто) и UI-кит в Figma.</p></div>
+</div>
+</div>
+<script>
+const G=['Лоу-фай','Поп','Электроника','Рок','Эмбиент','Хип-хоп'],M=['спокойное','энергичное','грустное','мечтательное'];
+function chips(id,arr,on){const e=document.getElementById(id);e.innerHTML=arr.map((x,i)=>`<button class="chip${i==on?' on':''}">${x}</button>`).join('');e.onclick=ev=>{const b=ev.target.closest('button');if(!b)return;[...e.children].forEach(c=>c.classList.toggle('on',c===b));upd()}}
+chips('gen',G,0);chips('mood',M,0);
+const wave=document.getElementById('wave');for(let i=0;i<34;i++){const b=document.createElement('i');b.style.setProperty('--k',i);b.style.setProperty('--h',(30+Math.abs(Math.sin(i*.7))*70)+'%');wave.appendChild(b)}
+const sc=document.getElementById('scrub');for(let i=0;i<46;i++){const b=document.createElement('i');b.style.height=(20+Math.abs(Math.sin(i*.45)*Math.cos(i*.13))*80)+'%';if(i<17)b.className='pl';sc.appendChild(b)}
+const st=['Подбираем гармонию…','Пишем мелодию…','Сводим и мастерим…'];let si=0;setInterval(()=>{si=(si+1)%3;document.getElementById('stg').textContent=st[si]},1600);
+function title(){const t=document.getElementById('pr').value.trim().split(/\s+/).slice(-3).join(' ');return t?t[0].toUpperCase()+t.slice(1):'Без названия'}
+function upd(){const g=document.querySelector('#gen .on').textContent,m=document.querySelector('#mood .on').textContent;document.getElementById('tg').textContent=`${g} · ${m} · 2:00`}
+document.getElementById('go').onclick=()=>{const t=title();document.getElementById('tn').textContent=t;document.getElementById('cvt').textContent=t;upd();document.querySelector('.ph:nth-child(3)').scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})};
+let pl=17;setInterval(()=>{const bars=sc.children;pl=(pl+1)%bars.length;[...bars].forEach((b,i)=>b.classList.toggle('pl',i<=pl))},500);
+const L=[['Вечер под дождём','Лоу-фай · 2:00','#7b5cff'],['Утренний бег','Электроника · 3:10','#c6ff3d'],['Для презентации','Эмбиент · 1:30','#ff5ea8'],['День рождения Маши','Поп · 2:40','#5ee0ff'],['Гаражный рок','Рок · 2:20','#ff9d3d']];
+document.getElementById('lib').innerHTML=L.map(([n,s,c])=>`<div class="it"><i style="background:${c}"></i><div><b>${n}</b><small>${s}</small></div></div>`).join('');
+</script>
+</body>
+</html>
